@@ -1,5 +1,7 @@
 package angerbauer.mylist;
 
+import java.util.NoSuchElementException;
+
 public class MyList<E>{
     private Node<E> start;
     private Node<E> last;
@@ -49,18 +51,27 @@ public class MyList<E>{
         }
     }
     public E get(int index) {
-        if (index < 0 || index >= size) return null;
-        if (index == 0) return start.data;
+        if(index>=size){
+            throw new IndexOutOfBoundsException();
+        }
         return (E) search(index).data;
+    }
+
+    public boolean removeFirst(){
+        return false;
+    }
+
+    public boolean removeLast(){
+        return false;
     }
 
     public boolean remove(String s){
         Node<E> node = start;
-        for (int i = 1; i <= size ; i++) {
+        for (int i = 0; i < size ; i++) {
             if(s.equals(node.data)){
                 if(s.equals(start.data)){
-                    start = node.next;
-                    node.next.prev = start;
+                    node.next.prev = null;
+                    start = node;
                 }else if(s.equals(last.data)){
                     last = node.prev;
                     node.prev.next = last;
@@ -77,7 +88,9 @@ public class MyList<E>{
     }
 
     public E remove(int index){
-        if(index >= size || index < 0) return null;
+        if(index >= size){
+            throw new IndexOutOfBoundsException();
+        }
         Node<E> node = start;
         for (int i = 1; i <= size ; i++) {
             if(search(index).data.equals(node.data)){
@@ -101,23 +114,38 @@ public class MyList<E>{
     }
 
     public E set(int index, E s){
+        if(index >= size){
+            throw new IndexOutOfBoundsException();
+        }
         E previously = (E) search(index).data;
         search(index).data = s;
         return previously;
     }
 
-    public boolean contains(String s){
+    public boolean contains(Object s){
         return indexOf(s) >= 0;
     }
 
-    public int indexOf(String s){
+    public int indexOf(Object s){
         Node<E> n = start;
-        for (int i = 0; i < size -1; i++) {
-            if (n.data.equals(s)) {
+
+        if(s == null){
+            for (int i = 0; i < size; i++) {
+                if(n.data == null){
+                    return i;
+                }
+                n = n.next;
+            }
+        }
+
+        Node<E> n2 = start;
+        for (int i = 0; i < size; i++) {
+            if (n2.data.equals(s)) {
                 return i;
             }
-            n = n.next;
+            n2 = n2.next;
         }
+
         return -1;
     }
 
