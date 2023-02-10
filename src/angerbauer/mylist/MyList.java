@@ -31,23 +31,29 @@ public class MyList<E>{
         return true;
     }
 
-    public void add(int index, E s){
-        if(index == 0){
-            if(size == 0){
-                add(s);
-                size++;
-            }else{
-                Node<E> node = new Node(s, search(index), null);
-                start = node;
-                search(index).next.prev = node;
-                size++;
+    public void add(int index, E e) {
+        if (index == size - 1) {
+            Node<E> node = new Node<E>(e, null, null);
+            last.next = node;
+            node.prev = last;
+            last = node;
+        } else if (index == 0) {
+            Node<E> node = new Node<E>(e, null, null);
+            start = node;
+            node.next = start;
+            start = node;
+        } else {
+            Node<E> node = start;
+            for (int i = 0; i < index - 1; i++) {
+                node = node.next;
             }
-        }else{
-            Node<E> node = new Node(s, search(index), search(index).prev);
-            search(index).prev.next = node;
-            search(index).next.prev = node;
-            size++;
+            Node<E> nodeAdd = new Node<E>(e, null, null);
+            nodeAdd.prev = node;
+            nodeAdd.next = node.next;
+            node.next.prev = nodeAdd;
+            node.next = nodeAdd;
         }
+        size++;
     }
     public E get(int index) {
         if(index>=size){
@@ -56,22 +62,32 @@ public class MyList<E>{
         return (E) search(index).data;
     }
 
-    public boolean removeFirst(){
-        return false;
-    }
-
-    public boolean removeLast(){
-        return false;
-    }
-
     public boolean remove(E s){
-        if(s == null) return false;
-        if(start.data.equals(s)) return removeFirst();
-        if(last.data.equals(s)) return removeLast();
-
-        //remove in der linkedlist fählt und removefirst und last
+        Node<E> node = start;
+        for (int i = 0; i < size ; i++) {
+            if(s.equals(node.data)){
+                if(s.equals(start.data)){
+                    if(size == 1){
+                        start = null;
+                        last = null;
+                        size = 0;
+                        return true;
+                    }
+                    start = node.next;
+                    node.next.prev = start;
+                }else if(s.equals(last.data)){
+                    last = node.prev;
+                    node.prev.next = last;
+                }else{
+                    node.prev.next = node.next;
+                    node.prev = node.next;
+                }
+                size--;
+                return true;
+            }
+            node = node.next;
+        }
         return false;
-
     }
 
     public E remove(int index){
@@ -109,11 +125,11 @@ public class MyList<E>{
         return previously;
     }
 
-    public boolean contains(Object s){
+    public boolean contains(E s){
         return indexOf(s) >= 0;
     }
 
-    public int indexOf(Object s){
+    public int indexOf(E s){
         Node<E> n = start;
 
         if(s == null){

@@ -10,8 +10,8 @@ public class Main {
         list.add("simon");
 
 
-        for (int i = 0; i <= list.size() ; i++) {
-            System.out.println(list.get(i));
-        }
+        LinkedList<String> l = new LinkedList<>();
+        l.add("");
+        System.out.println(        l.remove(""));
     }
 }
