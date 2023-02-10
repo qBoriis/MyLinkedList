@@ -1,6 +1,5 @@
 package angerbauer.mylist;
 
-import java.util.NoSuchElementException;
 
 public class MyList<E>{
     private Node<E> start;
@@ -12,7 +11,7 @@ public class MyList<E>{
 
     public Node search(int index){
         Node<E> s = start;
-        for (int i = 1; i <= index; i++) {
+        for (int i = 0; i < index; i++) {
             s = s.next;
         }
         return s;
@@ -65,26 +64,14 @@ public class MyList<E>{
         return false;
     }
 
-    public boolean remove(String s){
-        Node<E> node = start;
-        for (int i = 0; i < size ; i++) {
-            if(s.equals(node.data)){
-                if(s.equals(start.data)){
-                    node.next.prev = null;
-                    start = node;
-                }else if(s.equals(last.data)){
-                    last = node.prev;
-                    node.prev.next = last;
-                }else{
-                    node.prev.next = node.next;
-                    node.prev = node.next;
-                }
-                size--;
-                return true;
-            }
-            node = node.next;
-        }
+    public boolean remove(E s){
+        if(s == null) return false;
+        if(start.data.equals(s)) return removeFirst();
+        if(last.data.equals(s)) return removeLast();
+
+        //remove in der linkedlist fählt und removefirst und last
         return false;
+
     }
 
     public E remove(int index){
