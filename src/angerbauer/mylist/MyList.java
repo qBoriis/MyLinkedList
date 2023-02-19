@@ -1,5 +1,8 @@
 package angerbauer.mylist;
 
+/**
+ * @author Boris Angerbauer
+ */
 
 public class MyList<E> {
     private Node<E> start;
@@ -35,35 +38,31 @@ public class MyList<E> {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
 
-        } else if (index == size - 1) {
-            Node<E> node = new Node<E>(e, null, null);
-            last.next = node;
-            node.prev = last;
-            last = node;
         } else if (index == 0) {
-            if(size == 0){
-                Node<E> node = new Node<E>(e, null, null);
-                start = node;
+            Node<E> node = new Node<>(e, null, null);
+            if (size == 0) {
                 last = node;
-            }else{
-                Node<E> addNode = new Node<E>(e, null, null);
-                start.prev = addNode;
-                addNode.next = start;
-                start = addNode;
+            } else {
+                node.next = start;
             }
+            start = node;
+        } else if (index == size && size == 1) {
+            Node<E> add = new Node<>(e, start, null);
+            Node<E> node = start;
+            node.next = add;
+            last = add;
+        } else if (index == size) {
+            Node<E> node = new Node<>(e, last, null);
+            last.next = node;
+            last = node;
         } else {
-            if(size == 1){
-
-            }
             Node<E> node = start;
             for (int i = 0; i < index - 1; i++) {
                 node = node.next;
             }
-            Node<E> nodeAdd = new Node<E>(e, null, node.prev);
-            System.out.println(node.prev);
-            nodeAdd.prev.next = nodeAdd;
-            nodeAdd.next = node;
-            node.prev = nodeAdd;
+            Node<E> add = new Node<>(e, node, node.next);
+            node.next = add;
+            node.next.prev = add;
         }
         size++;
     }
@@ -119,26 +118,40 @@ public class MyList<E> {
         if (index >= size) {
             throw new IndexOutOfBoundsException();
         }
-        Node<E> node = start;
-        for (int i = 1; i <= size; i++) {
-            if (search(index).data.equals(node.data)) {
-                E removed = (E) search(index).data;
-                if (search(index).data.equals(start.data)) {
-                    start = node.next;
-                    node.next.prev = start;
-                } else if (search(index).data.equals(last.data)) {
-                    last = node.prev;
-                    node.prev.next = last;
-                } else {
-                    node.prev.next = node.next;
-                    node.prev = node.next;
-                }
-                size--;
-                return removed;
-            }
-            node = node.next;
+
+        if(index == 0 && size == 1){
+            Node<E> node = start;
+            start = null;
+            last = null;
+            size--;
+            return node.data;
         }
-        return null;
+
+        if(index == 0){
+            Node<E> node = start;
+            node.next.prev = null;
+            start = node.next;
+            node.next = null;
+            size--;
+            return node.data;
+        }
+
+        if(index == size-1){
+            Node<E> node = last;
+            last = node.prev;
+            node.prev.next = null;
+            node.prev = null;
+            size--;
+            return node.data;
+        }
+
+        Node<E> n = search(index);
+        n.prev.next = n.next;
+        n.next.prev = n.prev;
+        n.next = null;
+        n.prev = null;
+        size--;
+        return n.data;
     }
 
     public E set(int index, E s) {
@@ -196,6 +209,5 @@ public class MyList<E> {
             this.next = next;
             this.prev = prev;
         }
-
     }
 }

@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author Boris Angerbauer
  */
+
 public class test {
 
     static MyList otherList;
