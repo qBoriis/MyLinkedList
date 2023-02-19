@@ -53,7 +53,6 @@ public class test {
             javaList.add(i, String.valueOf(i));
             assertEquals(javaList.get(i), otherList.get(i));
         }
-
     }
 
     /**
