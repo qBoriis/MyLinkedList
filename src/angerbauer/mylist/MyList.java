@@ -95,6 +95,13 @@ public class MyList<E> {
             return true;
         }
 
+        if (s.equals(last.data)) {
+            last = node.prev;
+            node.prev.next = last;
+            size--;
+            return true;
+        }
+
         for (int i = 0; i < size; i++) {
             if (s.equals(node.data)) {
                 node.prev.next = node.next;
@@ -105,12 +112,7 @@ public class MyList<E> {
             node = node.next;
         }
 
-        if (s.equals(last.data)) {
-            last = node.prev;
-            node.prev.next = last;
-            size--;
-            return true;
-        }
+
         return false;
     }
 
